@@ -36,6 +36,11 @@
             "type": "boolean",
             "default": true,
             "description": "Apply the unmerged fix from online-judge-tools/api-client#173 (AtCoder changed memory notation from KB/MB to KiB/MiB). Disable once the fix is merged upstream and included in the pinned apiClientVersion."
+        },
+        "installSessionHelper": {
+            "type": "boolean",
+            "default": true,
+            "description": "Install the 'set-atcoder-session' command, which writes a browser-copied REVEL_SESSION cookie into both oj and acc session stores (AtCoder's Cloudflare check breaks in-container 'oj login' / 'acc login')."
         }
     },
     "installsAfter": [

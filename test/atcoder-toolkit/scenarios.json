@@ -12,7 +12,8 @@
         "image": "mcr.microsoft.com/devcontainers/base:bookworm",
         "features": {
             "atcoder-toolkit": {
-                "applyAtcoderMemoryPatch": false
+                "applyAtcoderMemoryPatch": false,
+                "installSessionHelper": false
             }
         }
     }

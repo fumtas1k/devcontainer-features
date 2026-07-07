@@ -25,14 +25,22 @@ PyPI release (no third-party fork involved). Set `applyAtcoderMemoryPatch` to
 it is used as-is; otherwise the distro's `nodejs`/`npm` packages are installed
 as a fallback.
 
-## Logging in to AtCoder
+## Logging in to AtCoder (`set-atcoder-session`)
 
 AtCoder sits behind a Cloudflare check, so `oj login` / `acc login` from inside
-a container usually fails. Log in from your regular browser instead, copy the
-`REVEL_SESSION` cookie, and write it into both tools' session stores
+a container usually fails. This feature therefore ships a helper command
+(disable with `installSessionHelper: false`):
+
+1. Log in to AtCoder in your regular browser (passing the Cloudflare check)
+2. DevTools → Application/Storage → Cookies → `https://atcoder.jp` → copy the
+   `REVEL_SESSION` value
+3. In the container run `set-atcoder-session` and paste the value
+
+It writes the cookie into both tools' session stores
 (`~/.local/share/online-judge-tools/cookie.jar` and
-`~/.config/atcoder-cli-nodejs/session.json`). Authentication is per-machine
-secret data — keep it out of the image (e.g. persist it in a named volume).
+`~/.config/atcoder-cli-nodejs/session.json`). Verify with
+`oj login --check https://atcoder.jp/`. Authentication is per-machine secret
+data — keep it out of the image (e.g. persist those paths in named volumes).
 
 ## OS support
 

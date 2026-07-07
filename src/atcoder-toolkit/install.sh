@@ -13,6 +13,7 @@ OJ_VERSION="${OJVERSION:-11.5.1}"
 API_CLIENT_VERSION="${APICLIENTVERSION:-10.10.1}"
 ACC_VERSION="${ACCVERSION:-2.2.0}"
 APPLY_MEMORY_PATCH="${APPLYATCODERMEMORYPATCH:-true}"
+INSTALL_SESSION_HELPER="${INSTALLSESSIONHELPER:-true}"
 
 FEATURE_DIR="$(cd "$(dirname "$0")" && pwd)"
 VENV_DIR="/usr/local/share/online-judge-tools"
@@ -92,5 +93,13 @@ else
 fi
 echo "Installing $acc_spec ..."
 npm install -g "$acc_spec"
+
+# --- set-atcoder-session helper ----------------------------------------------
+# AtCoder's Cloudflare check breaks in-container `oj login` / `acc login`;
+# this command writes a browser-copied REVEL_SESSION cookie into both tools.
+if [ "$INSTALL_SESSION_HELPER" = "true" ]; then
+    install -m 0755 "$FEATURE_DIR/set-atcoder-session.py" /usr/local/bin/set-atcoder-session
+    echo "Installed /usr/local/bin/set-atcoder-session"
+fi
 
 echo "Done. oj: $(oj --version 2>/dev/null || true), acc: $(acc --version 2>/dev/null || true)"
