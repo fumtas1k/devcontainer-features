@@ -1,0 +1,46 @@
+{
+    "id": "atcoder-toolkit",
+    "version": "1.0.0",
+    "name": "AtCoder toolkit (online-judge-tools + atcoder-cli)",
+    "documentationURL": "https://github.com/fumtas1k/devcontainer-features/tree/main/src/atcoder-toolkit",
+    "description": "Installs online-judge-tools (oj) and atcoder-cli (acc) for competitive programming on AtCoder. Optionally applies the unmerged upstream fix (online-judge-tools/api-client#173) for AtCoder's KB/MB -> KiB/MiB memory-notation change.",
+    "options": {
+        "ojVersion": {
+            "type": "string",
+            "proposals": [
+                "11.5.1",
+                "latest"
+            ],
+            "default": "11.5.1",
+            "description": "online-judge-tools version to install from PyPI ('latest' for the newest release)."
+        },
+        "apiClientVersion": {
+            "type": "string",
+            "proposals": [
+                "10.10.1",
+                "latest"
+            ],
+            "default": "10.10.1",
+            "description": "online-judge-api-client version to install from PyPI ('latest' for the newest release)."
+        },
+        "accVersion": {
+            "type": "string",
+            "proposals": [
+                "2.2.0",
+                "latest"
+            ],
+            "default": "2.2.0",
+            "description": "atcoder-cli version to install from npm ('latest' for the newest release)."
+        },
+        "applyAtcoderMemoryPatch": {
+            "type": "boolean",
+            "default": true,
+            "description": "Apply the unmerged fix from online-judge-tools/api-client#173 (AtCoder changed memory notation from KB/MB to KiB/MiB). Disable once the fix is merged upstream and included in the pinned apiClientVersion."
+        }
+    },
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/common-utils",
+        "ghcr.io/devcontainers/features/node",
+        "ghcr.io/devcontainers/features/python"
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "with-node-feature": {
+        "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+        "features": {
+            "ghcr.io/devcontainers/features/node:1": {
+                "version": "lts"
+            },
+            "atcoder-toolkit": {}
+        }
+    },
+    "without-memory-patch": {
+        "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+        "features": {
+            "atcoder-toolkit": {
+                "applyAtcoderMemoryPatch": false
+            }
+        }
+    }
+}
