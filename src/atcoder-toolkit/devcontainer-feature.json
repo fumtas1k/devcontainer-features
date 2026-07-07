@@ -1,6 +1,6 @@
 {
     "id": "atcoder-toolkit",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "name": "AtCoder toolkit (online-judge-tools + atcoder-cli)",
     "documentationURL": "https://github.com/fumtas1k/devcontainer-features/tree/main/src/atcoder-toolkit",
     "description": "Installs online-judge-tools (oj) and atcoder-cli (acc) for competitive programming on AtCoder. Optionally applies the unmerged upstream fix (online-judge-tools/api-client#173) for AtCoder's KB/MB -> KiB/MiB memory-notation change.",

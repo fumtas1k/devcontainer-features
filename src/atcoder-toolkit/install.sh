@@ -76,7 +76,10 @@ echo "Installing online-judge-tools ($OJ_VERSION) + online-judge-api-client ($AP
 rm -rf "$VENV_DIR"
 python3 -m venv "$VENV_DIR"
 "$VENV_DIR/bin/pip" install --no-cache-dir --upgrade pip
+# setuptools: oj が import する distutils は Python 3.12 で標準ライブラリから
+# 削除された。setuptools の互換シム(distutils-precedence.pth)で補う。
 "$VENV_DIR/bin/pip" install --no-cache-dir \
+    setuptools \
     "$(pip_spec online-judge-tools "$OJ_VERSION")" \
     "$(pip_spec online-judge-api-client "$API_CLIENT_VERSION")"
 ln -sf "$VENV_DIR/bin/oj" /usr/local/bin/oj
