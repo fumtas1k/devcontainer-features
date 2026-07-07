@@ -17,6 +17,11 @@ jobs:
         baseImage:
           - mcr.microsoft.com/devcontainers/base:bookworm
           - mcr.microsoft.com/devcontainers/base:ubuntu
+        exclude:
+          # numo-narray (デフォルト gems に含む) は ubuntu noble のツールチェーンで
+          # ネイティブ拡張がビルド不能 (上流問題)。src/atcoder-ruby/NOTES.md 参照。
+          - features: atcoder-ruby
+            baseImage: mcr.microsoft.com/devcontainers/base:ubuntu
     steps:
       - uses: actions/checkout@v7
 

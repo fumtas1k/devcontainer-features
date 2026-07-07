@@ -34,3 +34,12 @@ Pair with
 ## OS support
 
 Debian/Ubuntu (apt-based) images only.
+
+## Known issue: numo-narray on Ubuntu Noble
+
+`numo-narray` (latest release 2022) fails to compile its native extension with
+the newer toolchain on Ubuntu Noble images
+(`incompatible-pointer-types` errors). It builds fine on Debian Bookworm
+(`mcr.microsoft.com/devcontainers/base:bookworm`), which is what CI tests.
+On Noble, drop `numo-narray` from the `gems` option or use a Bookworm-based
+image until the gem is fixed upstream.
