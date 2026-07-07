@@ -11,7 +11,7 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        features: [atcoder-toolkit]
+        features: [atcoder-toolkit, atcoder-ruby]
         baseImage:
           - mcr.microsoft.com/devcontainers/base:bookworm
           - mcr.microsoft.com/devcontainers/base:ubuntu
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        features: [atcoder-toolkit]
+        features: [atcoder-toolkit, atcoder-ruby]
     steps:
       - uses: actions/checkout@v7
 

@@ -1,0 +1,22 @@
+{
+    "id": "atcoder-ruby",
+    "version": "1.0.0",
+    "name": "AtCoder Ruby environment (competitive-programming gems)",
+    "documentationURL": "https://github.com/fumtas1k/devcontainer-features/tree/main/src/atcoder-ruby",
+    "description": "Installs Ruby gems for competitive programming on AtCoder (ac-library-rb, rbtree, numo-narray by default) globally, so solutions run with plain 'ruby main.rb' -- no Bundler needed, matching the AtCoder judge environment. Ruby itself should come from ghcr.io/devcontainers/features/ruby (this feature is ordered after it); falls back to the distro Ruby if none is present.",
+    "options": {
+        "gems": {
+            "type": "string",
+            "proposals": [
+                "ac-library-rb rbtree numo-narray",
+                "ac-library-rb@1.2.0 rbtree@0.4.7 numo-narray@0.9.2.1 ruby-lsp"
+            ],
+            "default": "ac-library-rb rbtree numo-narray",
+            "description": "Space-separated gems to install globally. Pin with name@version (e.g. 'ac-library-rb@1.2.0'); without a pin the latest release is installed."
+        }
+    },
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/common-utils",
+        "ghcr.io/devcontainers/features/ruby"
+    ]
+}
