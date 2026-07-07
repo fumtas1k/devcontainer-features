@@ -44,7 +44,6 @@
         }
     },
     "installsAfter": [
-        "ghcr.io/devcontainers/features/common-utils",
         "ghcr.io/devcontainers/features/node",
         "ghcr.io/devcontainers/features/python"
     ]

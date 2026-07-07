@@ -47,7 +47,23 @@ if ! command -v gcc >/dev/null 2>&1 || ! command -v make >/dev/null 2>&1; then
     check_packages build-essential
 fi
 
-for spec in $GEMS; do
+# Split the option into specs without glob expansion, and validate each as
+# "name" or "name@version" — reject anything gem could interpret as a flag.
+set -f
+specs=($GEMS)
+set +f
+if [ "${#specs[@]}" -eq 0 ]; then
+    echo "(!) The 'gems' option is empty. Specify space-separated gems like 'ac-library-rb@1.2.0 rbtree'." >&2
+    exit 1
+fi
+for spec in "${specs[@]}"; do
+    if ! [[ "$spec" =~ ^[A-Za-z0-9_.-]+(@[0-9][A-Za-z0-9.-]*)?$ ]]; then
+        echo "(!) Invalid gem spec: '$spec' (expected 'name' or 'name@version')" >&2
+        exit 1
+    fi
+done
+
+for spec in "${specs[@]}"; do
     name="${spec%%@*}"
     if [ "$spec" != "$name" ]; then
         version="${spec#*@}"

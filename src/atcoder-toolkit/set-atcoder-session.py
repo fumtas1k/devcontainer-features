@@ -16,14 +16,16 @@ AtCoder のログインに Cloudflare のチェックが入り `oj login` / `acc
 
 使い方(コンテナ内。atcoder-toolkit feature が /usr/local/bin/set-atcoder-session として導入):
     set-atcoder-session
-    # 実行後、プロンプトに REVEL_SESSION の値を貼り付ける
+    # 実行後、プロンプトに REVEL_SESSION の値を貼り付ける(エコーなし)
     # (標準ライブラリのみ使用)
-    # 引数でも渡せる: set-atcoder-session '<値>'
+    # 引数でも渡せるが、シェル履歴とプロセス一覧に値が残るため非推奨:
+    #   set-atcoder-session '<値>'
 
 確認:
     oj login --check https://atcoder.jp/
 """
 import datetime
+import getpass
 import http.cookiejar
 import json
 import os
@@ -37,7 +39,7 @@ def update_oj(value: str) -> Path:
     """oj の cookie.jar (LWPCookieJar) に REVEL_SESSION を書き込む。"""
     data_home = os.environ.get("XDG_DATA_HOME") or str(Path.home() / ".local" / "share")
     path = Path(data_home) / "online-judge-tools" / "cookie.jar"
-    path.parent.mkdir(parents=True, exist_ok=True)
+    path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
 
     jar = http.cookiejar.LWPCookieJar(str(path))
     if path.exists():
@@ -63,6 +65,7 @@ def update_oj(value: str) -> Path:
     )
     jar.set_cookie(cookie)
     jar.save(ignore_discard=True, ignore_expires=True)
+    path.chmod(0o600)  # セッション Cookie なので所有者のみ読み書き可に
     return path
 
 
@@ -74,7 +77,7 @@ def update_acc(value: str) -> Path:
     """
     config_home = os.environ.get("XDG_CONFIG_HOME") or str(Path.home() / ".config")
     path = Path(config_home) / "atcoder-cli-nodejs" / "session.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
+    path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
 
     if path.exists():
         data = json.loads(path.read_text())
@@ -91,6 +94,7 @@ def update_acc(value: str) -> Path:
         cookies.append(entry)
 
     path.write_text(json.dumps(data, indent=4))
+    path.chmod(0o600)  # セッション Cookie なので所有者のみ読み書き可に
     return path
 
 
@@ -98,8 +102,12 @@ def main() -> None:
     if len(sys.argv) > 1:
         value = sys.argv[1].strip()
     else:
-        # 引数無しなら対話入力(シェル履歴に秘密を残さない)
-        value = input("paste REVEL_SESSION value: ").strip()
+        # 引数無しなら対話入力(シェル履歴に残さない・エコーなし)。
+        # パイプ入力(echo <値> | set-atcoder-session)にも対応する。
+        if sys.stdin.isatty():
+            value = getpass.getpass("paste REVEL_SESSION value: ").strip()
+        else:
+            value = sys.stdin.readline().strip()
     if not value:
         sys.exit("error: REVEL_SESSION value is empty")
 

@@ -4,6 +4,10 @@
 [devcontainers/feature-starter](https://github.com/devcontainers/feature-starter) の構成に沿って
 GitHub Actions（`devcontainers/action`）で GHCR に公開している。
 
+このリポの案内（本 README）は日本語、公開される feature 単位のドキュメント
+（`devcontainer-feature.json` の description と `NOTES.md`。release 時に
+`src/<feature>/README.md` として自動生成される）はエコシステムの慣例に合わせて英語。
+
 ## Features
 
 言語によらない AtCoder ツール（`atcoder-toolkit`）と、言語ごとの環境（`atcoder-ruby`）に

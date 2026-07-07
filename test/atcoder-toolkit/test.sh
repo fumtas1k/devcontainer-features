@@ -14,5 +14,7 @@ check "acc is on PATH" bash -c "acc --version | grep -F '2.2.0'"
 # set-atcoder-session: run with a dummy value and verify both session stores
 check "set-atcoder-session writes oj cookie jar" bash -c "set-atcoder-session dummyvalue && grep -q 'REVEL_SESSION=dummyvalue' \"\$HOME/.local/share/online-judge-tools/cookie.jar\""
 check "set-atcoder-session writes acc session.json" bash -c "grep -q 'REVEL_SESSION=dummyvalue' \"\$HOME/.config/atcoder-cli-nodejs/session.json\""
+check "session files are owner-only (0600)" bash -c "stat -c '%a' \"\$HOME/.local/share/online-judge-tools/cookie.jar\" | grep -qx 600 && stat -c '%a' \"\$HOME/.config/atcoder-cli-nodejs/session.json\" | grep -qx 600"
+check "set-atcoder-session accepts piped stdin" bash -c "echo pipedvalue | set-atcoder-session && grep -q 'REVEL_SESSION=pipedvalue' \"\$HOME/.config/atcoder-cli-nodejs/session.json\""
 
 reportResults

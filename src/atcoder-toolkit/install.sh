@@ -44,6 +44,20 @@ if ! command -v apt-get >/dev/null 2>&1; then
     exit 1
 fi
 
+# Version options must be a plain version number or "latest" — reject anything
+# that a package manager could interpret otherwise (npm aliases like
+# "npm:other-pkg@1.0", flags, ranges, empty values).
+validate_version() {
+    local option_name="$1" value="$2"
+    if [ "$value" != "latest" ] && ! [[ "$value" =~ ^[0-9][A-Za-z0-9.+-]*$ ]]; then
+        echo "(!) Invalid $option_name: '$value' (expected a version number like 1.2.3, or 'latest')" >&2
+        exit 1
+    fi
+}
+validate_version ojVersion "$OJ_VERSION"
+validate_version apiClientVersion "$API_CLIENT_VERSION"
+validate_version accVersion "$ACC_VERSION"
+
 # pip requirement spec: pin unless "latest"
 pip_spec() {
     local package="$1" version="$2"
@@ -58,6 +72,8 @@ pip_spec() {
 check_packages python3 python3-venv ca-certificates
 
 echo "Installing online-judge-tools ($OJ_VERSION) + online-judge-api-client ($API_CLIENT_VERSION) into $VENV_DIR ..."
+# Recreate the venv so a rebuild with different versions never keeps stale packages
+rm -rf "$VENV_DIR"
 python3 -m venv "$VENV_DIR"
 "$VENV_DIR/bin/pip" install --no-cache-dir --upgrade pip
 "$VENV_DIR/bin/pip" install --no-cache-dir \
@@ -72,6 +88,14 @@ if [ "$APPLY_MEMORY_PATCH" = "true" ]; then
         echo "AtCoder memory-notation patch already applied (or fixed upstream); skipping."
     else
         check_packages patch
+        # Dry-run first: a partial application (patch aborting halfway through
+        # its hunks) would leave site-packages inconsistent.
+        if ! patch -p1 -d "$site" --dry-run < "$FEATURE_DIR/oj-atcoder-memory.patch" >/dev/null 2>&1; then
+            echo "(!) oj-atcoder-memory.patch does not apply cleanly to online-judge-api-client $API_CLIENT_VERSION." >&2
+            echo "    The upstream code has likely changed. Either set applyAtcoderMemoryPatch=false" >&2
+            echo "    (the fix may already be included upstream) or pin apiClientVersion to 10.10.1." >&2
+            exit 1
+        fi
         patch -p1 -d "$site" < "$FEATURE_DIR/oj-atcoder-memory.patch"
         echo "Applied oj-atcoder-memory.patch to $site"
     fi

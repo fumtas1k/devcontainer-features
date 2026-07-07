@@ -31,11 +31,11 @@ jobs:
           git config --global user.name github-actions[bot]
           git config pull.rebase false
 
-          branch=automated-documentation-update-$GITHUB_RUN_ID
+          branch=automated-documentation-update-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT
           git checkout -b "$branch"
           message='Automated documentation update'
 
-          git add */**/README.md
+          git add 'src/*/README.md'
           git commit -m 'Automated documentation update [skip ci]' || export NO_UPDATES=true
 
           if [ "$NO_UPDATES" != "true" ]; then
