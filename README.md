@@ -28,6 +28,8 @@ GitHub Actions（`devcontainers/action`）で GHCR に公開している。
 
 ### [`atcoder-toolkit`](./src/atcoder-toolkit)
 
+[![GHCR](https://img.shields.io/badge/ghcr.io-atcoder--toolkit-blue?logo=github)](https://github.com/users/fumtas1k/packages/container/package/devcontainer-features%2Fatcoder-toolkit)
+
 AtCoder 用の CLI ツール一式（`oj` + `acc`）。言語非依存。
 PyPI の `atcoder-tools` パッケージとは別物。
 
@@ -39,6 +41,8 @@ PyPI の `atcoder-tools` パッケージとは別物。
 オプション（バージョン固定・パッチ有無）は [src/atcoder-toolkit/README.md](./src/atcoder-toolkit/README.md) を参照。
 
 ### [`atcoder-ruby`](./src/atcoder-ruby)
+
+[![GHCR](https://img.shields.io/badge/ghcr.io-atcoder--ruby-blue?logo=github)](https://github.com/users/fumtas1k/packages/container/package/devcontainer-features%2Fatcoder-ruby)
 
 Ruby の競プロ環境。gem（既定: `ac-library-rb` `rbtree` `numo-narray`）を
 **グローバルにインストール**し、`ruby main.rb` だけで解答を実行できるようにする
