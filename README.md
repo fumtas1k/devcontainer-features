@@ -15,10 +15,10 @@ GitHub Actions（`devcontainers/action`）で GHCR に公開している。
 
 ```jsonc
 "features": {
-    // Ruby 本体は公式 feature でバージョン固定
-    "ghcr.io/devcontainers/features/ruby:1": { "version": "3.4.5" },
     // 言語によらない AtCoder ツール (oj + acc)
     "ghcr.io/fumtas1k/devcontainer-features/atcoder-toolkit:1": {},
+    // Ruby 本体は公式 feature でバージョン固定
+    "ghcr.io/devcontainers/features/ruby:1": { "version": "3.4.5" },
     // Ruby の競プロ用 gem をグローバルに焼き込み
     "ghcr.io/fumtas1k/devcontainer-features/atcoder-ruby:1": {
         "gems": "ac-library-rb@1.2.0 rbtree@0.4.7 numo-narray@0.9.2.1 ruby-lsp"
