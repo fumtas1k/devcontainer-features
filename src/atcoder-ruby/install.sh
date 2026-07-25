@@ -74,9 +74,10 @@ if [ "$remote_user" != "root" ] && id -u "$remote_user" >/dev/null 2>&1 && [ -d 
     gem_home_group="$(stat -c '%G' "$gem_home")"
     if [ -g "$gem_home" ] \
         && [ -n "$gem_home_group" ] \
-        && id -nG "$remote_user" | tr ' ' '\n' | grep -Fxq "$gem_home_group" \
-        && [ "$(stat -c '%A' "$gem_home" | cut -c 6)" = "w" ]; then
-        umask 0002
+        && [ -n "$(find "$gem_home" -maxdepth 0 -perm -g+w -print -quit)" ]; then
+        case " $(id -nG "$remote_user") " in
+            *" $gem_home_group "*) umask 0002 ;;
+        esac
     fi
 fi
 
