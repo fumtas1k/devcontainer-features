@@ -63,6 +63,24 @@ for spec in "${specs[@]}"; do
     fi
 done
 
+# The official Ruby feature makes its system-wide gem home group-writable so
+# the remote user can add gems later. gem install runs here as root, so use a
+# group-friendly umask when that shared setup is detected. The gem home's
+# setgid bit then preserves its group on newly-created paths.
+gem_home="$(gem env home)"
+original_umask="$(umask)"
+remote_user="${_REMOTE_USER:-root}"
+if [ "$remote_user" != "root" ] && id -u "$remote_user" >/dev/null 2>&1 && [ -d "$gem_home" ]; then
+    gem_home_group="$(stat -c '%G' "$gem_home")"
+    if [ -g "$gem_home" ] \
+        && [ -n "$gem_home_group" ] \
+        && [ -n "$(find "$gem_home" -maxdepth 0 -perm -g+w -print -quit)" ]; then
+        case " $(id -nG "$remote_user") " in
+            *" $gem_home_group "*) umask 0002 ;;
+        esac
+    fi
+fi
+
 for spec in "${specs[@]}"; do
     name="${spec%%@*}"
     if [ "$spec" != "$name" ]; then
@@ -74,6 +92,8 @@ for spec in "${specs[@]}"; do
         gem install --no-document "$name"
     fi
 done
+
+umask "$original_umask"
 
 echo "Done. Installed gems:"
 gem list | grep -E "^($(echo "$GEMS" | tr ' ' '\n' | sed 's/@.*//' | paste -sd '|' -)) " || true
